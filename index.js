@@ -18,7 +18,8 @@ client.on("qr", (qr) => {
 });
 
 client.on("ready", () => {
-  console.log("Client is ready!");
+  console.log("Cuenta vinculada!");
+  listenMessage(); 
 });
 
 client.on("message", async (message) => {
@@ -50,3 +51,41 @@ client.on("message", async (message) => {
 });
 
 client.initialize();
+
+const listenMessage = ( ) => {
+  client.on ('message',(msg) => {
+    //const phone = msg.from.split('@')[0];
+    //console.log(from, body, phone);
+    const{from, to, body} = msg;
+    switch(body){
+      case 'hola':
+        sendMenssage(from, 'hola como estas'); 
+      break
+
+      case 'adios':
+        sendMenssage(from, 'nos vemos luego');
+        sendMdia(from, 'gato1.jpeg' );
+      break
+
+      case 'botones':
+        console.log('encuentra los botones')
+         let button = new Buttons("Button body",[{id:"customId",body:"button1"},{body:"button2"},{body:"button3"}],"title","footer");
+        //'Presciona un Boton',[{id:"customId",body:"button1"},{body:"button2"},{body:"button3"}],"title","footer")
+        // console.log("valor de los botones:",button);
+        client.sendMessage(from,button)
+        break
+    }
+
+    console.log(from, body);
+    sendMenssage(from, 'mensaje por defecto');
+  })
+}
+
+const sendMenssage = (to, message) => {
+  client.sendMessage(to, message);
+}
+
+const sendMdia = (to, file ) => {
+  const mediaFile = MessageMedia.fromFilePath(`./mediaSend/${file}`)
+  client.sendMessage(to, mediaFile);
+}
